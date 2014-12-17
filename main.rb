@@ -3,7 +3,7 @@ require 'rubyXL'
 # ワークブックの読込
 workbook = RubyXL::Parser.parse('excels/beaglesoft_template2.xlsx')
 
-# こちらは動作しないためNG
+# note:こちらは動作しない
 # add_sheet = Marshal.load(Marshal.dump(workbook['テストシート名']))
 # add_sheet.sheet_name = 'コピーシート名'
 # add_sheet.workbook = workbook2
