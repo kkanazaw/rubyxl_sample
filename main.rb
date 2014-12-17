@@ -1,12 +1,18 @@
 require 'rubyXL'
 
 # ワークブックの読込
-workbook = RubyXL::Parser.parse('excels/beaglesoft_template.xlsx')
-add_sheet = workbook['テストシート名'].dup
-add_sheet.sheet_name = 'コピーシート名'
+workbook = RubyXL::Parser.parse('excels/beaglesoft_template2.xlsx')
+
+# こちらは動作しないためNG
+# add_sheet = Marshal.load(Marshal.dump(workbook['テストシート名']))
+# add_sheet.sheet_name = 'コピーシート名'
+# add_sheet.workbook = workbook2
 
 # テストシートをコピーしてブックに追加
-workbook.worksheets << add_sheet
+# workbook2.worksheets << add_sheet
+
+worksheet = workbook.add_worksheet
+worksheet.sheet_data = workbook['テストシート名'].sheet_data
 
 # ブックの内容を列挙する
 workbook.worksheets.each do |worksheet|
