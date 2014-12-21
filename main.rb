@@ -3,16 +3,23 @@ require 'rubyXL'
 # ワークブックの読込
 workbook = RubyXL::Parser.parse('excels/beaglesoft_template2.xlsx')
 
-# note:こちらは動作しない
-# add_sheet = Marshal.load(Marshal.dump(workbook['テストシート名']))
-# add_sheet.sheet_name = 'コピーシート名'
-# add_sheet.workbook = workbook2
+# コピー元シート
+org_sheet =  workbook['テストシート名']
+
+add_sheet = Marshal.load(Marshal.dump(org_sheet))
+
+# こちらの方法でも問題ないが、エラーとなるケースが存在したためコメントアウト
+# Marshal.dump でシリアライズできない情報が欠落している可能性もある。
+# add_sheet = org_sheet
+
+add_sheet.sheet_name = 'コピーシート名'
+add_sheet.workbook = workbook
+
+# worksheetの番号を取得する
+add_sheet.sheet_id = workbook.worksheets.map(&:sheet_id).max + 1
 
 # テストシートをコピーしてブックに追加
-# workbook2.worksheets << add_sheet
-
-worksheet = workbook.add_worksheet
-worksheet.sheet_data = workbook['テストシート名'].sheet_data
+workbook.worksheets << add_sheet
 
 # ブックの内容を列挙する
 workbook.worksheets.each do |worksheet|
@@ -21,7 +28,8 @@ workbook.worksheets.each do |worksheet|
 end
 
 # 元から存在するシートを削除する
-# workbook.worksheets.delete_at(0)
+delete_sheet_index = workbook.worksheets.index(org_sheet)
+workbook.worksheets.delete_at delete_sheet_index
 
 # outputsディレクトリに保存する
 file_name = "beaglesoft_template_#{Time.now.strftime('%Y%m%d%H%M%s')}.xlsx"
