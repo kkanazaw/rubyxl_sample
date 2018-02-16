@@ -1,8 +1,6 @@
 vendor/bundle/
 .idea/
 
-outputs/
-
 outputs/*.gem
 *.rbc
 /.config
